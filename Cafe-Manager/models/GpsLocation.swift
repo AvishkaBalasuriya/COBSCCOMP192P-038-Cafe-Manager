@@ -9,12 +9,17 @@ import UIKit
 
 class GpsLocation: NSObject {
 
-    var latitude:Float
-    var longitude:Float
+    var latitude:Double
+    var longitude:Double
     
-    init(latitude:Float,longitude:Float){
+    init(latitude:Double,longitude:Double){
         self.latitude=latitude
         self.longitude=longitude
+    }
+    
+    override init() {
+        self.latitude=0.0
+        self.longitude=0.0
     }
     
 }

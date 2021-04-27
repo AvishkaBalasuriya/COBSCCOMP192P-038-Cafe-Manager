@@ -5,6 +5,15 @@
 //  Created by Avishka Balasuriya on 2021-04-11.
 //
 
+/*
+ 0 - New
+ 1 - Preperation
+ 2 - Ready
+ 3 - Arriving
+ 4 - Done
+ 5 - Cancel
+ */
+
 import UIKit
 import FirebaseFirestore
 
@@ -71,6 +80,9 @@ class firestoreDataService: NSObject {
             if let err = err {
                 completion(500)
             } else {
+                if status == 2{
+//                    self.listenToUserArriving()
+                }
                 completion(204)
             }
         }
@@ -126,5 +138,16 @@ class firestoreDataService: NSObject {
             }
         }
     }
+    
+//    func listenToOrderStatus(status:Int){
+//        db.collection("orders").whereField("status", isEqualTo: status)
+//            .addSnapshotListener { querySnapshot, error in
+//                guard let documents = querySnapshot?.documents else {
+//                    print("Error fetching documents: \(error!)")
+//                    return
+//                }
+//                print("Current cities in CA: \(querySnapshot?.documents)")
+//            }
+//    }
 
 }

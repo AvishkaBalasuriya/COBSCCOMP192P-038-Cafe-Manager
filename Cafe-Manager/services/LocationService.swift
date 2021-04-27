@@ -12,11 +12,54 @@ class LocationService: NSObject {
     
     let locationManager = CLLocationManager()
     
-    func getGpsLocation(){
+    func configure(context:CLLocationManagerDelegate,locationManager:CLLocationManager){
+        // Ask for Authorisation from the User.
+        locationManager.requestAlwaysAuthorization()
+
+        // For use in foreground
+        locationManager.requestWhenInUseAuthorization()
         
-        let currentLoc = locationManager.location?.coordinate
-        print(currentLoc!.latitude)
-        print(currentLoc!.longitude)
-        
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { (success, error) in
+               if let error = error {
+                   print("Request Authorization Failed (\(error), \(error.localizedDescription))")
+               }
+           }
+
+        if CLLocationManager.locationServicesEnabled() {
+            locationManager.delegate=context
+            locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+            locationManager.startUpdatingLocation()
+            Constants.RESTURENTLOCATION.latitude=locationManager.location?.coordinate.latitude ?? 0.0
+            Constants.RESTURENTLOCATION.longitude=locationManager.location?.coordinate.longitude ?? 0.0
+            print(Constants.RESTURENTLOCATION.latitude)
+        }
     }
+    
+    func getGpsLocation(completion: @escaping (Any)->()){
+        let location = CLLocation()
+        let currentLoc = locationManager.location
+        location.setValue(currentLoc?.coordinate.latitude ?? 0.0, forKey: "latitude")
+        location.setValue(currentLoc?.coordinate.longitude ?? 0.0, forKey: "longitude")
+        completion(location)
+    }
+    
+    func getResturentLocation()->CLLocation{
+        let location = CLLocation(latitude: Constants.RESTURENTLOCATION.latitude, longitude: Constants.RESTURENTLOCATION.longitude)
+        return location
+    }
+    
+    func calculateDistance(gpsLocation:CLLocation,resturentLocation:CLLocation){
+        let distance=gpsLocation.distance(from: resturentLocation) / 1000
+        if distance<=10{
+            // Customer Coming
+            print("Customer Arrived")
+            
+            
+        }else{
+            // User still arriving
+            print("Customer Still Arriving")
+        }
+    }
+    
 }
+
