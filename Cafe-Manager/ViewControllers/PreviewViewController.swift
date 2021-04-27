@@ -7,6 +7,14 @@
 
 import UIKit
 
+struct Objects{
+    var sectionName:String!
+    var sectionObjects:[Item]!
+}
+
+var objectsArray=[Objects]()
+var sectionNames=[String]
+
 class CategoryTableView: UITableViewCell {
     @IBOutlet weak var imgFoodImage: UIImageView!
     @IBOutlet weak var lblFoodName: UILabel!
@@ -31,6 +39,13 @@ class PreviewViewController: UIViewController {
         super.viewWillAppear(animated)
     }
     
+    private func makeCategoryArray(){
+        for item in ItemData.itemList{
+            if
+            objectsArray.append(Objects(sectionName: ))
+        }
+    }
+    
 }
 
 extension PreviewViewController:UITableViewDelegate{
@@ -40,6 +55,14 @@ extension PreviewViewController:UITableViewDelegate{
 
 extension PreviewViewController:UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        
+    }
+    
+    func numberOfSectionsInTableView(table:UITableView)->Int{
         
     }
     

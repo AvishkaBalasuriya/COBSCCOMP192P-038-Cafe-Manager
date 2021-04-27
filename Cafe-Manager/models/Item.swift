@@ -15,8 +15,9 @@ class Item: NSObject {
     var itemPrice:Float
     var itemDiscount:Float
     var isAvailable:Bool
+    var categoryId:Int
 
-    init(itemId:String,itemName:String,itemThumbnail:String,itemDescription:String,itemPrice:Float,itemDiscount:Float=0.0,isAvailable:Bool=true) {
+    init(itemId:String,itemName:String,itemThumbnail:String,itemDescription:String,itemPrice:Float,itemDiscount:Float=0.0,isAvailable:Bool=true,categoryId:Int=0) {
         self.itemId=itemId
         self.itemName=itemName
         self.itemThumbnail=itemThumbnail
@@ -24,5 +25,6 @@ class Item: NSObject {
         self.itemPrice=itemPrice
         self.itemDiscount=itemDiscount
         self.isAvailable=isAvailable
+        self.categoryId=categoryId
     }
 }
