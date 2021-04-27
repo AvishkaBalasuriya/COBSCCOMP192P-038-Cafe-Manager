@@ -24,7 +24,7 @@
             </objects>
             <point key="canvasLocation" x="-310" y="-711"/>
         </scene>
-        <!--Store-->
+        <!--Store View Controller-->
         <scene sceneID="QJF-61-tgb">
             <objects>
                 <viewController id="AHk-wt-Bc7" customClass="StoreViewController" customModule="Cafe_Manager" customModuleProvider="target" sceneMemberID="viewController">
@@ -46,7 +46,6 @@
                             <constraint firstItem="MPT-Qz-uX2" firstAttribute="trailing" secondItem="p5i-aI-FSP" secondAttribute="trailing" id="x5d-ox-KRN"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Store" id="CgD-ej-Ghb"/>
                     <navigationItem key="navigationItem" id="Aql-iG-kmf">
                         <barButtonItem key="leftBarButtonItem" style="plain" id="mSh-by-4R0">
                             <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="aYl-W5-7e7">
@@ -97,7 +96,7 @@
                                 <rect key="frame" x="0.0" y="44" width="414" height="818"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="cellCategory" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellCategory" id="ySD-bI-ZUz">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="cellCategory" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellCategory" id="ySD-bI-ZUz" customClass="CategoryTableViewCell" customModule="Cafe_Manager" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="414" height="150.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="ySD-bI-ZUz" id="U0C-MX-IXA">
@@ -165,7 +164,8 @@
                                                                         <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" restorationIdentifier="swItemStatus" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="70o-wW-2yz">
                                                                             <rect key="frame" x="34.5" y="33" width="51" height="31"/>
                                                                             <connections>
-                                                                                <action selector="swItemStatus:" destination="zvt-Wk-1sD" eventType="valueChanged" id="qEt-aS-D0R"/>
+                                                                                <action selector="tglAvalible:" destination="ySD-bI-ZUz" eventType="valueChanged" id="wjT-8F-FP2"/>
+                                                                                <action selector="tglItemAvailable:" destination="ySD-bI-ZUz" eventType="valueChanged" id="T6y-MI-oxr"/>
                                                                             </connections>
                                                                         </switch>
                                                                     </subviews>
@@ -190,6 +190,14 @@
                                                 <constraint firstItem="IsR-07-T9J" firstAttribute="top" secondItem="U0C-MX-IXA" secondAttribute="top" id="rG0-1z-OWh"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="imgFoodImage" destination="M6Y-rh-at7" id="epd-Cc-ziz"/>
+                                            <outlet property="lblFoodDescription" destination="m5J-7y-vAG" id="4Bd-H3-qq4"/>
+                                            <outlet property="lblFoodDiscount" destination="Gh7-ml-ucp" id="quQ-Xm-dl2"/>
+                                            <outlet property="lblFoodName" destination="JlT-EX-1sZ" id="yEf-CB-2qC"/>
+                                            <outlet property="lblFoodPrice" destination="RZ3-Zk-Ai6" id="7Pz-ug-lzn"/>
+                                            <outlet property="tglAvailable" destination="70o-wW-2yz" id="pJe-F8-W8N"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
@@ -204,9 +212,11 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="CMn-ml-dGk"/>
+                    <connections>
+                        <outlet property="tblCategoryItemTable" destination="QwZ-HL-aag" id="cdf-Y7-UGT"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="E9w-Ih-K4T" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-                <exit id="zvt-Wk-1sD" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="1437.68115942029" y="-3442.6339285714284"/>
         </scene>

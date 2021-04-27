@@ -13,26 +13,30 @@ struct Objects{
 }
 
 var objectsArray=[Objects]()
-var sectionNames=[String]
 
-class CategoryTableView: UITableViewCell {
+class CategoryTableViewCell: UITableViewCell {
+    @IBOutlet weak var tglAvailable: UISwitch!
     @IBOutlet weak var imgFoodImage: UIImageView!
     @IBOutlet weak var lblFoodName: UILabel!
     @IBOutlet weak var lblFoodDescription: UILabel!
     @IBOutlet weak var lblFoodPrice: UILabel!
     @IBOutlet weak var lblFoodDiscount: UILabel!
-    @IBAction func swItemStatus(_ sender: Any) {
-    }
-    
 }
 
 class PreviewViewController: UIViewController {
     
+    var sectionItem:[String:[Item]]=[:]
 
+    @IBOutlet weak var tblCategoryItemTable: UITableView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        self.makeCategoryArray()
+        print(objectsArray)
+        self.tblCategoryItemTable.delegate=self
+        self.tblCategoryItemTable.dataSource=self
+        self.tblCategoryItemTable.reloadData()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -41,8 +45,15 @@ class PreviewViewController: UIViewController {
     
     private func makeCategoryArray(){
         for item in ItemData.itemList{
-            if
-            objectsArray.append(Objects(sectionName: ))
+            if !self.sectionItem.keys.contains(item.category){
+                self.sectionItem[item.category]=[]
+                self.sectionItem[item.category]?.append(item)
+            }else{
+                self.sectionItem[item.category]?.append(item)
+            }
+        }
+        for (key,value) in self.sectionItem{
+            objectsArray.append(Objects(sectionName: key, sectionObjects: value))
         }
     }
     
@@ -55,29 +66,37 @@ extension PreviewViewController:UITableViewDelegate{
 
 extension PreviewViewController:UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
+
+        return objectsArray[section].sectionObjects.count
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        
+        return objectsArray[section].sectionName
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return objectsArray.count
     }
     
     func numberOfSectionsInTableView(table:UITableView)->Int{
-        
+        return objectsArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell:CategoryTableView =  tableView.dequeueReusableCell(withIdentifier: "tbvCell") as! CategoryTableView
-        cell.imgFoodImage.imageFromServerURL(urlString: ItemData.itemList[indexPath.row].itemThumbnail)
-        cell.lblFoodName.text = ItemData.itemList[indexPath.row].itemName
-        cell.lblFoodDescription.text = ItemData.itemList[indexPath.row].itemDescription
-        cell.lblFoodPrice.text = String(format:"%.2f", ItemData.itemList[indexPath.row].itemPrice)
+        let cell:CategoryTableViewCell =  tableView.dequeueReusableCell(withIdentifier: "cellCategory") as! CategoryTableViewCell
         
-        if ItemData.itemList[indexPath.row].itemDiscount == 0.0{
+        cell.imgFoodImage.imageFromServerURL(urlString: objectsArray[indexPath.section].sectionObjects[indexPath.row].itemThumbnail)
+        cell.lblFoodName.text = objectsArray[indexPath.section].sectionObjects[indexPath.row].itemName
+        cell.lblFoodDescription.text = objectsArray[indexPath.section].sectionObjects[indexPath.row].itemDescription
+        cell.lblFoodPrice.text = String(format:"%.2f", objectsArray[indexPath.section].sectionObjects[indexPath.row].itemPrice)
+        
+        if objectsArray[indexPath.section].sectionObjects[indexPath.row].itemDiscount == 0.0{
             cell.lblFoodDiscount.isHidden=true
         }else{
-            cell.lblFoodDiscount.text=String(format:"%.2f", ItemData.itemList[indexPath.row].itemDiscount)
+            cell.lblFoodDiscount.text=String(format:"%.2f", objectsArray[indexPath.section].sectionObjects[indexPath.row].itemDiscount)
         }
+        
+        
 
         cell.layer.backgroundColor = UIColor.clear.cgColor
         cell.layer.shadowColor = UIColor.black.cgColor

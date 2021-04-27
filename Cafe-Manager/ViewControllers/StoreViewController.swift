@@ -35,7 +35,10 @@ class StoreViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.setupView()
+        firestoreDataService().getAllItems(){
+            completion in
+            self.setupView()
+        }
         // Do any additional setup after loading the view.
     }
     
@@ -60,7 +63,6 @@ class StoreViewController: UIViewController {
     }
 
     @objc func selectionDidChange(sender:UISegmentedControl){
-        print("##########")
         self.updateView()
     }
     

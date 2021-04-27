@@ -96,7 +96,8 @@ class firestoreDataService: NSObject {
             "itemThumbnail":item.itemThumbnail,
             "itemPrice":item.itemPrice,
             "itemDiscount":item.itemDiscount,
-            "isAvailable":item.isAvailable
+            "isAvailable":item.isAvailable,
+            "category":item.category
         ]){ err in
             if err != nil{
                 completion(500)
@@ -121,8 +122,10 @@ class firestoreDataService: NSObject {
                     let itemPrice=document.data()["itemPrice"] as! Float
                     let itemDiscount=document.data()["itemDiscount"] as! Float
                     let isAvailable=document.data()["isAvailable"] as! Bool
-                    items.append(Item(itemId: itemId, itemName: itemName, itemThumbnail: itemThumbnail, itemDescription: itemDescription, itemPrice: itemPrice,itemDiscount: itemDiscount,isAvailable: isAvailable))
+                    let itemCategory=document.data()["category"] as! String
+                    items.append(Item(itemId: itemId, itemName: itemName, itemThumbnail: itemThumbnail, itemDescription: itemDescription, itemPrice: itemPrice,itemDiscount: itemDiscount,isAvailable: isAvailable,category: itemCategory))
                 }
+                populateItemList(items: items)
                 completion(items)
             }
         }
