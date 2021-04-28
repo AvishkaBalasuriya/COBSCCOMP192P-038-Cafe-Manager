@@ -66,5 +66,9 @@
 	<string>We want to access your current location in order to give you a better servicea</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>We want to access your current location in order to give you a better servicea</string>
+	<key>Privacy - Camera Usage Description </key>
+	<string>$(PRODUCT_NAME) camera use</string>
+	<key>Privacy - Photo Library Usage Description </key>
+	<string>$(PRODUCT_NAME) photo use</string>
 </dict>
 </plist>

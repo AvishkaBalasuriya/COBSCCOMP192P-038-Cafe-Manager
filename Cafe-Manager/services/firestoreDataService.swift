@@ -51,26 +51,33 @@ class firestoreDataService: NSObject {
         }
     }
     
-    func getAllOrders(status:Int,completion: @escaping (Any)->()){
-        var orders:[Order] = []
-        db.collection("orders").whereField("status", isEqualTo: status).getDocuments(){
-            (querySnapshot, err) in
-           if let err = err {
+    func getAllOrders(completion: @escaping (Any)->()){
+        db.collection("orders").addSnapshotListener { querySnapshot, error in
+            if let err = error {
                 completion(500)
-           } else {
-                for document in querySnapshot!.documents {
-                    let orderId:String=document.data()["orderId"] as! String
-                    let userEmailAddress:String=document.data()["userEmailAddress"] as! String
-                    var items:[String]=[]
-                     for item in document.data()["items"] as! [String]{
-                         items.append(item)
-                     }
-                    let total:Float=document.data()["total"] as! Float
-                    let status:Int=document.data()["status"] as! Int
-                    orders.append(Order(orderId: orderId, userEmailAddress: userEmailAddress, items: items, total: total, status: status))
+            }
+            var orders:[Order] = []
+            for document in querySnapshot!.documents {
+                var cart:[Cart]=[]
+                let orderId:String=document.data()["orderId"] as! String
+                let userEmailAddress:String=document.data()["userEmailAddress"] as! String
+                let items = document.data()["items"] as! [Any]
+                for item in items{
+                    let itemData = item as! [String:Any]
+                    let itemId:String = itemData["itemId"] as! String
+                    let itemName:String = itemData["itemName"] as! String
+                    let itemQty:Int = itemData["itemQty"] as! Int
+                    let itemPrice:Float = itemData["itemPrice"] as! Float
+                    let totalPrice:Float = itemData["totalPrice"] as! Float
+                    let cartItem = Cart(itemId: itemId, itemName: itemName, itemQty: itemQty, itemPrice: itemPrice, totalPrice: totalPrice)
+                    cart.append(cartItem)
                 }
-                 completion(orders)
-           }
+                let total:Float=document.data()["total"] as! Float
+                let status:Int=document.data()["status"] as! Int
+                orders.append(Order(orderId: orderId, userEmailAddress: userEmailAddress, items: cart, total: total, status: status))
+            }
+            populateOrderList(orders: orders)
+            completion(orders)
         }
     }
     
@@ -80,9 +87,7 @@ class firestoreDataService: NSObject {
             if let err = err {
                 completion(500)
             } else {
-                if status == 2{
-//                    self.listenToUserArriving()
-                }
+                //FirebaseService().updateOrderStatus(orderId: orderId, status: status)
                 completion(204)
             }
         }
@@ -142,15 +147,34 @@ class firestoreDataService: NSObject {
         }
     }
     
-//    func listenToOrderStatus(status:Int){
-//        db.collection("orders").whereField("status", isEqualTo: status)
-//            .addSnapshotListener { querySnapshot, error in
-//                guard let documents = querySnapshot?.documents else {
-//                    print("Error fetching documents: \(error!)")
-//                    return
-//                }
-//                print("Current cities in CA: \(querySnapshot?.documents)")
-//            }
-//    }
-
+    func getAllCategories(completion: @escaping (Any)->()){
+        db.collection("categories").addSnapshotListener {
+            querySnapshot, error in
+            if let err = error {
+                completion(500)
+            }else{
+                var categories:[Category]=[]
+                for document in querySnapshot!.documents {
+                    let categoryId=document.data()["categoryId"] as! String
+                    let categoryName=document.data()["categoryName"] as! String
+                    categories.append(Category(categoryId: categoryId, categoryName: categoryName))
+                }
+                populateCategoryList(categories: categories)
+                completion(categories)
+            }
+        }
+    }
+    
+    func addNewCategory(category:Category, completion: @escaping (Any)->()){
+        db.collection("categories").document(category.categoryId).setData([
+            "categoryId":category.categoryId,
+            "categoryName":category.categoryName
+        ]){ err in
+            if err != nil{
+                completion(500)
+            } else {
+                completion(201)
+            }
+        }
+    }
 }

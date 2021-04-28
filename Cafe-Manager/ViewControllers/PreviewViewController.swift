@@ -14,28 +14,31 @@ struct Objects{
 
 var objectsArray=[Objects]()
 
-class CategoryTableViewCell: UITableViewCell {
-    @IBOutlet weak var tglAvailable: UISwitch!
+class ItemTableViewCell: UITableViewCell {
+
     @IBOutlet weak var imgFoodImage: UIImageView!
     @IBOutlet weak var lblFoodName: UILabel!
     @IBOutlet weak var lblFoodDescription: UILabel!
     @IBOutlet weak var lblFoodPrice: UILabel!
     @IBOutlet weak var lblFoodDiscount: UILabel!
+    @IBOutlet weak var tglAvailable: UISwitch!
+    @IBAction func tglAvailability(_ sender: UISwitch) {
+        print(sender.tag)
+    }
 }
 
 class PreviewViewController: UIViewController {
     
     var sectionItem:[String:[Item]]=[:]
 
-    @IBOutlet weak var tblCategoryItemTable: UITableView!
-    
+    @IBOutlet weak var tblItemTable: UITableView!
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.makeCategoryArray()
-        print(objectsArray)
-        self.tblCategoryItemTable.delegate=self
-        self.tblCategoryItemTable.dataSource=self
-        self.tblCategoryItemTable.reloadData()
+        self.tblItemTable.delegate=self
+        self.tblItemTable.dataSource=self
+        self.tblItemTable.reloadData()
         
     }
     
@@ -56,7 +59,6 @@ class PreviewViewController: UIViewController {
             objectsArray.append(Objects(sectionName: key, sectionObjects: value))
         }
     }
-    
 }
 
 extension PreviewViewController:UITableViewDelegate{
@@ -65,6 +67,10 @@ extension PreviewViewController:UITableViewDelegate{
 }
 
 extension PreviewViewController:UITableViewDataSource{
+    @objc func connected(sender:UISwitch){
+        print("###")
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
         return objectsArray[section].sectionObjects.count
@@ -83,7 +89,7 @@ extension PreviewViewController:UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell:CategoryTableViewCell =  tableView.dequeueReusableCell(withIdentifier: "cellCategory") as! CategoryTableViewCell
+        let cell:ItemTableViewCell =  tableView.dequeueReusableCell(withIdentifier: "cellItem") as! ItemTableViewCell
         
         cell.imgFoodImage.imageFromServerURL(urlString: objectsArray[indexPath.section].sectionObjects[indexPath.row].itemThumbnail)
         cell.lblFoodName.text = objectsArray[indexPath.section].sectionObjects[indexPath.row].itemName
@@ -96,8 +102,9 @@ extension PreviewViewController:UITableViewDataSource{
             cell.lblFoodDiscount.text=String(format:"%.2f", objectsArray[indexPath.section].sectionObjects[indexPath.row].itemDiscount)
         }
         
+        cell.tglAvailable.tag=indexPath.row
+        cell.tglAvailable.addTarget(self, action: #selector(self.connected(sender:)), for: .valueChanged)
         
-
         cell.layer.backgroundColor = UIColor.clear.cgColor
         cell.layer.shadowColor = UIColor.black.cgColor
         cell.layer.shadowOffset = CGSize(width: 0, height: 0)
