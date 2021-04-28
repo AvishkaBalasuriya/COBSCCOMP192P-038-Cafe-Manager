@@ -17,20 +17,21 @@ class FirebaseStorageService: NSObject {
         let storageRef = storage.reference()
         let itemImageRef = storageRef.child(itemId+".jpg")
 
-        let uploadTask = itemImageRef.putData(data, metadata: nil) { (metadata, error) in
-            print(error)
-            guard let metadata = metadata else {
+        itemImageRef.putData(data, metadata: nil) { (metadata, error) in
+            if (error == nil){
+                print("Uploaded")
+                itemImageRef.downloadURL(){
+                    url,error in
+                    if (error == nil){
+                        completion(url?.absoluteString)
+                    }else{
+                        print("Unable to get download url")
+                        completion("")
+                    }
+                }
+            }else{
                 completion("")
-                return
             }
-            let size = metadata.size
-            itemImageRef.downloadURL { (url, error) in
-            guard let downloadURL = url else {
-                completion("")
-                return
-            }
-            completion(downloadURL)
-          }
         }
     }
 

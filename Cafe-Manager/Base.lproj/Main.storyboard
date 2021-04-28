@@ -97,11 +97,6 @@
                                                                 </view>
                                                             </subviews>
                                                             <edgeInsets key="layoutMargins" top="35" left="10" bottom="35" right="10"/>
-                                                            <userDefinedRuntimeAttributes>
-                                                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                                    <integer key="value" value="30"/>
-                                                                </userDefinedRuntimeAttribute>
-                                                            </userDefinedRuntimeAttributes>
                                                         </stackView>
                                                     </subviews>
                                                     <constraints>
@@ -389,7 +384,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="Aql-iG-kmf">
                         <barButtonItem key="leftBarButtonItem" style="plain" id="mSh-by-4R0">
-                            <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="aYl-W5-7e7">
+                            <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="aYl-W5-7e7">
                                 <rect key="frame" x="20" y="6" width="382" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <segments>
@@ -411,7 +406,6 @@
         <!--Store-->
         <scene sceneID="ZGk-JR-j8K">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Uha-2f-gfd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <navigationController id="zHH-Sm-Hkl" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Store" id="JYM-Rl-srC"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="bdw-6B-SVQ">
@@ -422,6 +416,7 @@
                         <segue destination="AHk-wt-Bc7" kind="relationship" relationship="rootViewController" id="HSo-Cw-Gar"/>
                     </connections>
                 </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Uha-2f-gfd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-310" y="-2701"/>
         </scene>
@@ -586,8 +581,98 @@
                     <view key="view" contentMode="scaleToFill" id="7Yg-eW-e44">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="eoT-RL-jES">
+                                <rect key="frame" x="0.0" y="44" width="414" height="769"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0vS-Wa-bEW">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="80"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="80" id="Sng-ea-oqq"/>
+                                        </constraints>
+                                    </view>
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="msI-ir-3jl">
+                                        <rect key="frame" x="0.0" y="80" width="414" height="609"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <prototypes>
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="cellBill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellBill" id="ARd-wR-dVc">
+                                                <rect key="frame" x="0.0" y="28" width="414" height="43.5"/>
+                                                <autoresizingMask key="autoresizingMask"/>
+                                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="ARd-wR-dVc" id="MGb-Lg-0Yy">
+                                                    <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <subviews>
+                                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" id="h9K-gS-4Zc">
+                                                            <rect key="frame" x="0.0" y="-1" width="414" height="44"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <subviews>
+                                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5pu-re-lSx">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="414" height="20.5"/>
+                                                                    <subviews>
+                                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2hb-48-MW6">
+                                                                            <rect key="frame" x="20" y="0.0" width="394" height="20.5"/>
+                                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                            <nil key="textColor"/>
+                                                                            <nil key="highlightedColor"/>
+                                                                        </label>
+                                                                    </subviews>
+                                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                                    <constraints>
+                                                                        <constraint firstItem="2hb-48-MW6" firstAttribute="leading" secondItem="5pu-re-lSx" secondAttribute="leading" constant="20" id="44a-OB-Uof"/>
+                                                                        <constraint firstAttribute="trailing" secondItem="2hb-48-MW6" secondAttribute="trailing" id="AZ1-SS-ukI"/>
+                                                                        <constraint firstItem="2hb-48-MW6" firstAttribute="top" secondItem="5pu-re-lSx" secondAttribute="top" id="NTp-DG-fI2"/>
+                                                                        <constraint firstAttribute="bottom" secondItem="2hb-48-MW6" secondAttribute="bottom" id="Qsl-Zq-iDy"/>
+                                                                    </constraints>
+                                                                </view>
+                                                                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="2kC-us-xQr">
+                                                                    <rect key="frame" x="0.0" y="20.5" width="414" height="23.5"/>
+                                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                                    <prototypes>
+                                                                        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="uYR-MK-i0k">
+                                                                            <rect key="frame" x="0.0" y="28" width="414" height="44"/>
+                                                                            <autoresizingMask key="autoresizingMask"/>
+                                                                            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="uYR-MK-i0k" id="mHe-AZ-7YS">
+                                                                                <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                                <subviews>
+                                                                                    <stackView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="J1A-ad-Uk4">
+                                                                                        <rect key="frame" x="107" y="-33.5" width="200" height="110"/>
+                                                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                                    </stackView>
+                                                                                </subviews>
+                                                                            </tableViewCellContentView>
+                                                                        </tableViewCell>
+                                                                    </prototypes>
+                                                                </tableView>
+                                                            </subviews>
+                                                        </stackView>
+                                                    </subviews>
+                                                </tableViewCellContentView>
+                                            </tableViewCell>
+                                        </prototypes>
+                                    </tableView>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eCW-pE-p0E">
+                                        <rect key="frame" x="0.0" y="689" width="414" height="80"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="80" id="Pw7-wo-Wrf"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="eCW-pE-p0E" secondAttribute="bottom" id="9lD-i6-yqt"/>
+                                </constraints>
+                            </stackView>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="NJO-an-kPs"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="NJO-an-kPs" firstAttribute="bottom" secondItem="eoT-RL-jES" secondAttribute="bottom" id="BMt-04-Vww"/>
+                            <constraint firstItem="NJO-an-kPs" firstAttribute="trailing" secondItem="eoT-RL-jES" secondAttribute="trailing" id="R32-df-YPq"/>
+                            <constraint firstItem="eoT-RL-jES" firstAttribute="top" secondItem="NJO-an-kPs" secondAttribute="top" id="aHv-mi-XLc"/>
+                            <constraint firstItem="eoT-RL-jES" firstAttribute="leading" secondItem="NJO-an-kPs" secondAttribute="leading" id="aO3-oh-NEz"/>
+                        </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Account" id="aC7-uf-tnG"/>
                     <navigationItem key="navigationItem" id="mOl-5R-vKj"/>
@@ -640,11 +725,6 @@
                                                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                     <color key="titleShadowColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                 </state>
-                                                                                <userDefinedRuntimeAttributes>
-                                                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                                                        <integer key="value" value="4"/>
-                                                                                    </userDefinedRuntimeAttribute>
-                                                                                </userDefinedRuntimeAttributes>
                                                                             </button>
                                                                         </subviews>
                                                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -849,11 +929,6 @@
                                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <color key="titleShadowColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         </state>
-                                                        <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                                <integer key="value" value="4"/>
-                                                            </userDefinedRuntimeAttribute>
-                                                        </userDefinedRuntimeAttributes>
                                                     </button>
                                                 </subviews>
                                                 <constraints>

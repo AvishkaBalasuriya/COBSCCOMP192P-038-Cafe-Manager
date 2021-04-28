@@ -72,9 +72,11 @@ class firestoreDataService: NSObject {
                     let cartItem = Cart(itemId: itemId, itemName: itemName, itemQty: itemQty, itemPrice: itemPrice, totalPrice: totalPrice)
                     cart.append(cartItem)
                 }
-                let total:Float=document.data()["total"] as! Float
+                let total:Float=document.data()[
+                    "total"] as! Float
                 let status:Int=document.data()["status"] as! Int
-                orders.append(Order(orderId: orderId, userEmailAddress: userEmailAddress, items: cart, total: total, status: status))
+                let timestamp:Timestamp = document.data()["timestamp"] as! Timestamp
+                orders.append(Order(orderId: orderId, userEmailAddress: userEmailAddress, items: cart, total: total, status: status,timestamp:timestamp.dateValue()))
             }
             populateOrderList(orders: orders)
             completion(orders)
@@ -174,6 +176,39 @@ class firestoreDataService: NSObject {
                 completion(500)
             } else {
                 completion(201)
+            }
+        }
+    }
+    
+    func getOrdersByDateRange(start:Date,end:Date,completion: @escaping (Any)->()){
+        var orders:[Order] = []
+        db.collection("orders").whereField("timestamp",isGreaterThanOrEqualTo: start).whereField("timestamp", isLessThan: end).getDocuments(){
+            (querySnapshot, err) in
+            if let err = err {
+                completion(500)
+            }else{
+                for document in querySnapshot!.documents {
+                    var cart:[Cart]=[]
+                    let orderId:String=document.data()["orderId"] as! String
+                    let userEmailAddress:String=document.data()["userEmailAddress"] as! String
+                    let items = document.data()["items"] as! [Any]
+                    for item in items{
+                        let itemData = item as! [String:Any]
+                        let itemId:String = itemData["itemId"] as! String
+                        let itemName:String = itemData["itemName"] as! String
+                        let itemQty:Int = itemData["itemQty"] as! Int
+                        let itemPrice:Float = itemData["itemPrice"] as! Float
+                        let totalPrice:Float = itemData["totalPrice"] as! Float
+                        let cartItem = Cart(itemId: itemId, itemName: itemName, itemQty: itemQty, itemPrice: itemPrice, totalPrice: totalPrice)
+                        cart.append(cartItem)
+                    }
+                    let total:Float=document.data()[
+                        "total"] as! Float
+                    let status:Int=document.data()["status"] as! Int
+                    let timestamp:Timestamp = document.data()["timestamp"] as! Timestamp
+                    orders.append(Order(orderId: orderId, userEmailAddress: userEmailAddress, items: cart, total: total, status: status,timestamp:timestamp.dateValue()))
+                    completion(orders)
+                }
             }
         }
     }
