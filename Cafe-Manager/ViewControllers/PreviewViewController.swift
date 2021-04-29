@@ -15,15 +15,15 @@ struct Objects{
 var objectsArray=[Objects]()
 
 class ItemTableViewCell: UITableViewCell {
-
     @IBOutlet weak var imgFoodImage: UIImageView!
     @IBOutlet weak var lblFoodName: UILabel!
     @IBOutlet weak var lblFoodDescription: UILabel!
     @IBOutlet weak var lblFoodPrice: UILabel!
     @IBOutlet weak var lblFoodDiscount: UILabel!
     @IBOutlet weak var tglAvailable: UISwitch!
-    @IBAction func tglAvailability(_ sender: UISwitch) {
-        print(sender.tag)
+    
+    @IBAction func tglAvailable(_ sender: UISwitch) {
+        print(sender.accessibilityIdentifier)
     }
 }
 
@@ -39,7 +39,6 @@ class PreviewViewController: UIViewController {
         self.tblItemTable.delegate=self
         self.tblItemTable.dataSource=self
         self.tblItemTable.reloadData()
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -67,12 +66,7 @@ extension PreviewViewController:UITableViewDelegate{
 }
 
 extension PreviewViewController:UITableViewDataSource{
-    @objc func connected(sender:UISwitch){
-        print("###")
-    }
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-
         return objectsArray[section].sectionObjects.count
     }
     
@@ -80,11 +74,18 @@ extension PreviewViewController:UITableViewDataSource{
         return objectsArray[section].sectionName
     }
     
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return objectsArray.count
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        view.tintColor = UIColor.systemGreen
+        let header = view as! UITableViewHeaderFooterView
+        header.textLabel?.textColor = UIColor.white
     }
     
-    func numberOfSectionsInTableView(table:UITableView)->Int{
+    func numberOfSections(in tableView: UITableView) -> Int {
+        if objectsArray.count == 0 {
+            self.tblItemTable.setEmptyView(title: "No items", message: "Your items will display in here")
+        } else {
+            self.tblItemTable.restore()
+        }
         return objectsArray.count
     }
     
@@ -101,9 +102,12 @@ extension PreviewViewController:UITableViewDataSource{
         }else{
             cell.lblFoodDiscount.text=String(format:"%.2f", objectsArray[indexPath.section].sectionObjects[indexPath.row].itemDiscount)
         }
+        cell.lblFoodDiscount?.layer.masksToBounds = true
+        cell.lblFoodDiscount?.layer.cornerRadius=cell.lblFoodDiscount.frame.width/10
         
-        cell.tglAvailable.tag=indexPath.row
-        cell.tglAvailable.addTarget(self, action: #selector(self.connected(sender:)), for: .valueChanged)
+        cell.tglAvailable.isOn=objectsArray[indexPath.section].sectionObjects[indexPath.row].isAvailable
+        
+//       cell.tglAvailable.accessibilityIdentifier=objectsArray[indexPath.section].sectionObjects[indexPath.row].itemId
         
         cell.layer.backgroundColor = UIColor.clear.cgColor
         cell.layer.shadowColor = UIColor.black.cgColor
@@ -112,13 +116,13 @@ extension PreviewViewController:UITableViewDataSource{
         cell.layer.shadowOpacity = 0.5
         cell.layer.shadowPath = UIBezierPath(rect: cell.bounds).cgPath
         cell.layer.masksToBounds = false
+        
         return cell
     }
 }
 
 extension UIImageView {
     public func imageFromServerURL(urlString: String) {
-        self.image = nil
         let urlStringNew = urlString.replacingOccurrences(of: " ", with: "%20")
         URLSession.shared.dataTask(with: NSURL(string: urlStringNew)! as URL, completionHandler: { (data, response, error) -> Void in
 
@@ -135,4 +139,3 @@ extension UIImageView {
 
     }
 }
-

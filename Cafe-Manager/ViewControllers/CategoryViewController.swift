@@ -20,28 +20,50 @@ class CategoryViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.btnAddCategory.addTarget(self, action: #selector(self.addNewCategory(sender:)), for: .touchUpInside)
+        self.btnAddCategory?.layer.masksToBounds = true
+        self.btnAddCategory?.layer.cornerRadius=self.btnAddCategory.frame.width/10
+        
         firestoreDataService().getAllCategories(){
             completion in
-            self.tblCategory.delegate=self
-            self.tblCategory.dataSource=self
-            self.tblCategory.reloadData()
             
+            if completion is [Category]{
+                self.tblCategory.delegate=self
+                self.tblCategory.dataSource=self
+                self.tblCategory.reloadData()
+            }else{
+                self.showAlert(title: "Firestore Error", message: "Unable to fetch categories")
+            }
         }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.btnAddCategory.addTarget(self, action: #selector(self.addNewCategory(sender:)), for: .touchUpInside)
     }
     
     @objc func addNewCategory(sender:UIButton){
+        if self.txtCategory.text == ""{
+            self.showAlert(title: "Invalid input", message: "Please enter valid value as category name")
+            return
+        }
+        
         let categoryId = NSUUID().uuidString.replacingOccurrences(of:"-", with: "")
-        let categoryName = self.txtCategory.text as! String
+        let categoryName = self.txtCategory.text!
         let category:Category = Category(categoryId:categoryId, categoryName:categoryName)
+        
         firestoreDataService().addNewCategory(category: category){
             completion in
-            print("Category Added")
-            self.tblCategory.reloadData()
+            
+            let result = completion as! Int
+            
+            if result==500{
+                self.showAlert(title: "Firestore Error", message: "Unable to add new category")
+                return
+            }else{
+                self.showAlert(title: "Success", message: "Category successfully added")
+                self.tblCategory.reloadData()
+            }
         }
     }
 }
@@ -53,6 +75,15 @@ extension CategoryViewController:UITableViewDelegate{
 
 extension CategoryViewController:UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return CategoryData.categoryList.count
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        if CategoryData.categoryList.count == 0 {
+            self.tblCategory.setEmptyView(title: "No categories", message: "Your categories will display in here")
+        } else {
+            self.tblCategory.restore()
+        }
         return CategoryData.categoryList.count
     }
     

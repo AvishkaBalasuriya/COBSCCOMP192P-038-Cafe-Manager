@@ -113,13 +113,15 @@ extension OrderViewController:UITableViewDataSource{
         cell.btnAccept.layer.masksToBounds = true
         
         if orderObjectsArray[indexPath.section].sectionObjects[indexPath.row].status==0{
-            cell.btnReject.isHidden=false
-            cell.btnReject.setTitle("Reject", for: .normal)
-            cell.btnReject.tag=indexPath.row
             cell.btnAccept.backgroundColor=UIColor.systemGreen
             cell.btnAccept.setTitle("Accept", for: .normal)
             cell.btnAccept.accessibilityIdentifier=orderObjectsArray[indexPath.section].sectionObjects[indexPath.row].orderId
             cell.btnAccept.addTarget(self, action: #selector(self.acceptOrder(sender:)), for: .touchUpInside)
+            
+            cell.btnReject.isHidden=false
+            cell.btnReject.setTitle("Reject", for: .normal)
+            cell.btnReject.accessibilityIdentifier=orderObjectsArray[indexPath.section].sectionObjects[indexPath.row].orderId
+            cell.btnReject.addTarget(self, action: #selector(self.rejectOrder(sender:)), for: .touchUpInside)
         }else{
             cell.btnReject.isHidden=true
             cell.btnAccept.backgroundColor=UIColor.systemYellow
@@ -140,6 +142,13 @@ extension OrderViewController:UITableViewDataSource{
     @objc func acceptOrder(sender:UIButton){
         let orderId = sender.accessibilityIdentifier!
         firestoreDataService().changeOrderStatus(orderId: orderId, status: 1){
+            completion in
+        }
+    }
+    
+    @objc func rejectOrder(sender:UIButton){
+        let orderId = sender.accessibilityIdentifier!
+        firestoreDataService().changeOrderStatus(orderId: orderId, status: 5){
             completion in
         }
     }

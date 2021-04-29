@@ -89,7 +89,7 @@ class firestoreDataService: NSObject {
             if let err = err {
                 completion(500)
             } else {
-                //FirebaseService().updateOrderStatus(orderId: orderId, status: status)
+                FirebaseService().updateOrderStatus(orderId: orderId, status: status)
                 completion(204)
             }
         }
@@ -182,7 +182,7 @@ class firestoreDataService: NSObject {
     
     func getOrdersByDateRange(start:Date,end:Date,completion: @escaping (Any)->()){
         var orders:[Order] = []
-        db.collection("orders").whereField("timestamp",isGreaterThanOrEqualTo: start).whereField("timestamp", isLessThan: end).getDocuments(){
+        db.collection("orders").whereField("timestamp",isGreaterThanOrEqualTo: end).whereField("timestamp", isLessThanOrEqualTo: start).getDocuments(){
             (querySnapshot, err) in
             if let err = err {
                 completion(500)
@@ -207,8 +207,9 @@ class firestoreDataService: NSObject {
                     let status:Int=document.data()["status"] as! Int
                     let timestamp:Timestamp = document.data()["timestamp"] as! Timestamp
                     orders.append(Order(orderId: orderId, userEmailAddress: userEmailAddress, items: cart, total: total, status: status,timestamp:timestamp.dateValue()))
-                    completion(orders)
                 }
+                populateBillOrderList(orders: orders)
+                completion(orders)
             }
         }
     }

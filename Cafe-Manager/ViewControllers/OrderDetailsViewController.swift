@@ -20,11 +20,24 @@ class OrderDetailsViewController: UIViewController {
     @IBOutlet weak var lblOrderStatus: UIButton!
     @IBOutlet weak var lblTimeRemaining: UILabel!
     @IBOutlet weak var btnCall: UIButton!
+    @IBOutlet weak var btnMarkAsDone: UIButton!
     
     var orderDetails:Order!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if orderDetails.status==1{
+            self.btnMarkAsDone.addTarget(self, action: #selector(self.markAsDone(sender:)), for: .touchUpInside)
+            self.btnMarkAsDone.isHidden=false
+        }else{
+            self.btnMarkAsDone.isHidden=true
+        }
+        
+        if UserData.mobileNumber != ""{
+            self.btnCall.addTarget(self, action: #selector(self.callCustomer(sender:)), for: .touchUpInside)
+        }
+        
         self.lblOrderStatus.layer.cornerRadius = self.lblOrderStatus.frame.width/2
         self.lblOrderStatus.layer.masksToBounds = true
         self.lblCustomerName.text=orderDetails.userEmailAddress+"("+orderDetails.orderId+")"
@@ -54,17 +67,49 @@ class OrderDetailsViewController: UIViewController {
             return "Other"
         }
     }
+    
+    @objc func markAsDone(sender:UIButton){
+        firestoreDataService().changeOrderStatus(orderId: orderDetails.orderId, status: 2){
+            completion in
+            
+            let result = completion as! Int
+            
+            if result==204{
+                self.navigationController?.popViewController(animated: true)
+            }else{
+                self.showAlert(title: "Firestore error", message: "Unable to update order status")
+            }
+        }
+    }
+    
+    @objc func callCustomer(sender:UIButton){
+        if let url = URL(string: "tel://\(UserData.mobileNumber)") {
+            UIApplication.shared.canOpenURL(url)
+         }
+    }
 }
 
 extension OrderDetailsViewController:UITableViewDelegate{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let orderViewController = self.storyboard?.instantiateViewController(withIdentifier:"OrderView") as? OrderViewController
-        
         self.navigationController?.pushViewController(orderViewController!, animated: true)
     }
 }
 
 extension OrderDetailsViewController:UITableViewDataSource{
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 100
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        if orderDetails.items.count == 0 {
+            self.tblCartDetails.setEmptyView(title: "No items", message: "Your cart items will display in here")
+        } else {
+            self.tblCartDetails.restore()
+        }
+        return orderDetails.items.count
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return orderDetails.items.count
     }
@@ -72,7 +117,7 @@ extension OrderDetailsViewController:UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell:CartTableViewCell =  tableView.dequeueReusableCell(withIdentifier: "cellCartDetails") as! CartTableViewCell
         
-        cell.lblItemQty.text=String(orderDetails.items[indexPath.row].itemQty)
+        cell.lblItemQty.text="x"+String(orderDetails.items[indexPath.row].itemQty)
         cell.lblItemName.text=orderDetails.items[indexPath.row].itemName
         cell.lblItemPrice.text=String(orderDetails.items[indexPath.row].itemPrice*Float(orderDetails.items[indexPath.row].itemQty))
         
@@ -84,10 +129,6 @@ extension OrderDetailsViewController:UITableViewDataSource{
         cell.layer.shadowPath = UIBezierPath(rect: cell.bounds).cgPath
         cell.layer.masksToBounds = false
         return cell
-    }
-
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100
     }
 }
 

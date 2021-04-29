@@ -75,12 +75,12 @@ class FirebaseService: NSObject {
                 orderStatusData.orderId=statusData["orderId"] as! String
                 orderStatusData.status=statusData["status"] as! Int
                 orderStatusData.isRecieved=statusData["isRecieved"] as! Bool
-                if orderStatusData.status == 0 && orderStatusData.status == 3{
+                if orderStatusData.status == 0 || orderStatusData.status == 3{
                     if orderStatusData.isRecieved == false{
                         self.notificationService.pushNotification(orderId: orderStatusData.orderId, orderStatus: orderStatusData.status){
                             result in
                             if result == true{
-                                self.markOrderAsRecieved(orderStatusData: orderStatusData,key: key)
+                                self.markStatusAsRecieved(orderStatusData: orderStatusData,key: key)
                             }
                         }
                     }
@@ -104,9 +104,8 @@ class FirebaseService: NSObject {
         ref.updateChildValues(["status":status,"isRecieved":false])
     }
     
-    func markOrderAsRecieved(orderStatusData:StatusData,key:String){
+    func markStatusAsRecieved(orderStatusData:StatusData,key:String){
         orderStatusData.isRecieved=true
-        print("Updating order status")
         let ref = Database.database().reference().child(UserData.mobileNumber).child(key).setValue(orderStatusData.asDictionary)
     }
     

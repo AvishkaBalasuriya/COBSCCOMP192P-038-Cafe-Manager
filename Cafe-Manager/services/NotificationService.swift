@@ -51,6 +51,7 @@ class NotificationService: NSObject {
     }
     
     func pushNotification(orderId:String,orderStatus:Int,result:@escaping (Bool)->()){
+        print("Setting push notification")
         switch orderStatus {
             case 0:
                 print("New order request")

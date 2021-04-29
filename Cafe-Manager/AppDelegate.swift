@@ -23,6 +23,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         FirebaseApp.configure()
         self.locationService.configure(context: self,locationManager: self.locationManager)
         self.notificationService.configure(context: self,application:application)
+        UserData.emailAddress="avishka@incubatelabs.com"
+        UserData.mobileNumber="0778293626"
         return true
     }
 
