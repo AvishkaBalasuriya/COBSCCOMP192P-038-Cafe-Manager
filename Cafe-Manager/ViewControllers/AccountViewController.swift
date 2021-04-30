@@ -32,27 +32,12 @@ class AccountViewController: UIViewController {
     var startDate:Date=Date()
     var endDate:Date=Calendar.current.date(byAdding: .day, value: -7, to: Date())!
     
+    @IBOutlet weak var btnLogOut: UIButton!
     @IBOutlet weak var pkrStartDate: UIDatePicker!
     @IBOutlet weak var pkrEndDate: UIDatePicker!
     @IBOutlet weak var btnPrintHistory: UIButton!
     @IBOutlet weak var lblTotal: UILabel!
     @IBOutlet weak var tblBill: UITableView!
-    
-    @IBAction func pkrStartDate(sender: UIDatePicker) {
-        self.startDate=sender.date
-        self.pkrEndDate.maximumDate=self.startDate
-        self.pkrEndDate.isHidden=false
-    }
-    
-    @IBAction func pkrEndDate(sender: UIDatePicker) {
-        self.endDate=sender.date
-        self.pkrStartDate.minimumDate=self.endDate
-        firestoreDataService().getOrdersByDateRange(start: self.startDate, end:self.endDate ){
-            completion in
-            self.makeDateArray(isFilter: true)
-            self.tblBill.reloadData()
-        }
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,7 +46,9 @@ class AccountViewController: UIViewController {
         self.tblBill.dataSource=self
         self.pkrEndDate.isHidden=true
         
-        firestoreDataService().getAllOrders(){
+        self.btnLogOut.addTarget(self, action: #selector(self.logout(sender:)), for: .touchUpInside)
+        
+        firestoreDataService().getOrdersByStatus(status: 4){
             completion in
             self.makeDateArray(isFilter: false)
             self.tblBill.reloadData()
@@ -79,7 +66,7 @@ class AccountViewController: UIViewController {
         if isFilter{
             orders=BillOrderData.billOrderList
         }else{
-            orders=OrderData.orderList
+            orders=BillOrderData.billOrderList
         }
         
         for order in orders{
@@ -110,6 +97,30 @@ class AccountViewController: UIViewController {
         }
         
         self.lblTotal.text = (String(self.grandTotal)=="0.0") ? "No Sale" : String(self.grandTotal)
+    }
+    
+    @objc func logout(sender:UIButton){
+        UserDefaults.standard.set(false, forKey: "isLogged")
+        let storeTabBarController = self.storyboard?.instantiateViewController(withIdentifier:"LoginViewController") as? LoginViewController
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+        self.navigationItem.leftBarButtonItem=nil
+        self.navigationItem.hidesBackButton=true
+        self.navigationController?.pushViewController(storeTabBarController!,animated: true)
+    }
+    
+    @IBAction func pkrStartDate(sender: UIDatePicker) {
+        self.startDate=sender.date
+        self.pkrEndDate.maximumDate=self.startDate
+        self.pkrEndDate.isHidden=false
+    }
+    
+    @IBAction func pkrEndDate(sender: UIDatePicker) {
+        self.endDate=sender.date
+        firestoreDataService().getOrdersByDateRange(start: self.startDate, end:self.endDate,status: 4){
+            completion in
+            self.makeDateArray(isFilter: true)
+            self.tblBill.reloadData()
+        }
     }
 }
 

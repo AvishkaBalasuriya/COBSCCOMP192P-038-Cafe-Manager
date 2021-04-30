@@ -62,7 +62,6 @@ class CategoryViewController: UIViewController {
                 return
             }else{
                 self.showAlert(title: "Success", message: "Category successfully added")
-                self.tblCategory.reloadData()
             }
         }
     }
@@ -84,7 +83,7 @@ extension CategoryViewController:UITableViewDataSource{
         } else {
             self.tblCategory.restore()
         }
-        return CategoryData.categoryList.count
+        return 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

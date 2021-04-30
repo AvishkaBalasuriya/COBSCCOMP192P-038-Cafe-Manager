@@ -76,20 +76,21 @@ class firestoreDataService: NSObject {
                     "total"] as! Float
                 let status:Int=document.data()["status"] as! Int
                 let timestamp:Timestamp = document.data()["timestamp"] as! Timestamp
-                orders.append(Order(orderId: orderId, userEmailAddress: userEmailAddress, items: cart, total: total, status: status,timestamp:timestamp.dateValue()))
+                let userId:String = document.data()["userId"] as! String
+                orders.append(Order(orderId: orderId, userEmailAddress: userEmailAddress, items: cart, total: total, status: status,userId: userId, timestamp:timestamp.dateValue()))
             }
             populateOrderList(orders: orders)
             completion(orders)
         }
     }
     
-    func changeOrderStatus(orderId:String, status:Int, completion: @escaping (Any)->()){
+    func changeOrderStatus(orderId:String,userId:String,status:Int, completion: @escaping (Any)->()){
         db.collection("orders").document(orderId).updateData(["status":status]){
             err in
             if let err = err {
                 completion(500)
             } else {
-                FirebaseService().updateOrderStatus(orderId: orderId, status: status)
+                FirebaseService().updateOrderStatus(orderId: orderId, status: status,userId: userId)
                 completion(204)
             }
         }
@@ -180,9 +181,9 @@ class firestoreDataService: NSObject {
         }
     }
     
-    func getOrdersByDateRange(start:Date,end:Date,completion: @escaping (Any)->()){
+    func getOrdersByDateRange(start:Date,end:Date,status:Int,completion: @escaping (Any)->()){
         var orders:[Order] = []
-        db.collection("orders").whereField("timestamp",isGreaterThanOrEqualTo: end).whereField("timestamp", isLessThanOrEqualTo: start).getDocuments(){
+        db.collection("orders").whereField("status", isEqualTo: status).whereField("timestamp",isGreaterThanOrEqualTo: end).whereField("timestamp", isLessThanOrEqualTo: start).getDocuments(){
             (querySnapshot, err) in
             if let err = err {
                 completion(500)
@@ -206,7 +207,43 @@ class firestoreDataService: NSObject {
                         "total"] as! Float
                     let status:Int=document.data()["status"] as! Int
                     let timestamp:Timestamp = document.data()["timestamp"] as! Timestamp
-                    orders.append(Order(orderId: orderId, userEmailAddress: userEmailAddress, items: cart, total: total, status: status,timestamp:timestamp.dateValue()))
+                    let userId:String = document.data()["userId"] as! String
+                    orders.append(Order(orderId: orderId, userEmailAddress: userEmailAddress, items: cart, total: total, status: status,userId: userId,timestamp:timestamp.dateValue()))
+                }
+                populateBillOrderList(orders: orders)
+                completion(orders)
+            }
+        }
+    }
+    
+    func getOrdersByStatus(status:Int,completion: @escaping (Any)->()){
+        var orders:[Order] = []
+        db.collection("orders").whereField("status", isEqualTo: status).getDocuments(){
+            (querySnapshot, err) in
+            if let err = err {
+                completion(500)
+            }else{
+                for document in querySnapshot!.documents {
+                    var cart:[Cart]=[]
+                    let orderId:String=document.data()["orderId"] as! String
+                    let userEmailAddress:String=document.data()["userEmailAddress"] as! String
+                    let items = document.data()["items"] as! [Any]
+                    for item in items{
+                        let itemData = item as! [String:Any]
+                        let itemId:String = itemData["itemId"] as! String
+                        let itemName:String = itemData["itemName"] as! String
+                        let itemQty:Int = itemData["itemQty"] as! Int
+                        let itemPrice:Float = itemData["itemPrice"] as! Float
+                        let totalPrice:Float = itemData["totalPrice"] as! Float
+                        let cartItem = Cart(itemId: itemId, itemName: itemName, itemQty: itemQty, itemPrice: itemPrice, totalPrice: totalPrice)
+                        cart.append(cartItem)
+                    }
+                    let total:Float=document.data()[
+                        "total"] as! Float
+                    let status:Int=document.data()["status"] as! Int
+                    let timestamp:Timestamp = document.data()["timestamp"] as! Timestamp
+                    let userId:String = document.data()["userId"] as! String
+                    orders.append(Order(orderId: orderId, userEmailAddress: userEmailAddress, items: cart, total: total, status: status,userId: userId,timestamp:timestamp.dateValue()))
                 }
                 populateBillOrderList(orders: orders)
                 completion(orders)

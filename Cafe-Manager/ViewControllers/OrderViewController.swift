@@ -115,18 +115,20 @@ extension OrderViewController:UITableViewDataSource{
         if orderObjectsArray[indexPath.section].sectionObjects[indexPath.row].status==0{
             cell.btnAccept.backgroundColor=UIColor.systemGreen
             cell.btnAccept.setTitle("Accept", for: .normal)
-            cell.btnAccept.accessibilityIdentifier=orderObjectsArray[indexPath.section].sectionObjects[indexPath.row].orderId
+            cell.btnAccept.accessibilityIdentifier=orderObjectsArray[indexPath.section].sectionObjects[indexPath.row].orderId+"_"+orderObjectsArray[indexPath.section].sectionObjects[indexPath.row].userId
             cell.btnAccept.addTarget(self, action: #selector(self.acceptOrder(sender:)), for: .touchUpInside)
             
             cell.btnReject.isHidden=false
+            cell.btnAccept.isEnabled=true
             cell.btnReject.setTitle("Reject", for: .normal)
-            cell.btnReject.accessibilityIdentifier=orderObjectsArray[indexPath.section].sectionObjects[indexPath.row].orderId
+            cell.btnReject.accessibilityIdentifier=orderObjectsArray[indexPath.section].sectionObjects[indexPath.row].orderId+"_"+orderObjectsArray[indexPath.section].sectionObjects[indexPath.row].userId
             cell.btnReject.addTarget(self, action: #selector(self.rejectOrder(sender:)), for: .touchUpInside)
         }else{
             cell.btnReject.isHidden=true
             cell.btnAccept.backgroundColor=UIColor.systemYellow
             cell.btnAccept.setTitle(self.mapOrderStatus(status: orderObjectsArray[indexPath.section].sectionObjects[indexPath.row].status), for: .normal)
             cell.btnAccept.tag=indexPath.row
+            cell.btnAccept.isEnabled=false
         }
         
         cell.layer.backgroundColor = UIColor.clear.cgColor
@@ -140,15 +142,17 @@ extension OrderViewController:UITableViewDataSource{
     }
     
     @objc func acceptOrder(sender:UIButton){
-        let orderId = sender.accessibilityIdentifier!
-        firestoreDataService().changeOrderStatus(orderId: orderId, status: 1){
+        let orderId = String(sender.accessibilityIdentifier!.split(separator: "_").first!)
+        let userId = String(sender.accessibilityIdentifier!.split(separator: "_").last!)
+        firestoreDataService().changeOrderStatus(orderId: orderId, userId: userId, status: 1){
             completion in
         }
     }
     
     @objc func rejectOrder(sender:UIButton){
-        let orderId = sender.accessibilityIdentifier!
-        firestoreDataService().changeOrderStatus(orderId: orderId, status: 5){
+        let orderId = String(sender.accessibilityIdentifier!.split(separator: "_").first!)
+        let userId = String(sender.accessibilityIdentifier!.split(separator: "_").last!)
+        firestoreDataService().changeOrderStatus(orderId: orderId,userId: userId , status: 5){
             completion in
         }
     }

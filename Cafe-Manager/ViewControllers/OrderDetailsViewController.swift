@@ -27,7 +27,7 @@ class OrderDetailsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if orderDetails.status==1{
+        if orderDetails.status==1 || orderDetails.status==3{ 
             self.btnMarkAsDone.addTarget(self, action: #selector(self.markAsDone(sender:)), for: .touchUpInside)
             self.btnMarkAsDone.isHidden=false
         }else{
@@ -69,7 +69,13 @@ class OrderDetailsViewController: UIViewController {
     }
     
     @objc func markAsDone(sender:UIButton){
-        firestoreDataService().changeOrderStatus(orderId: orderDetails.orderId, status: 2){
+        let newStatus:Int!
+        if orderDetails.status==1{
+            newStatus=2
+        }else{
+            newStatus=4
+        }
+        firestoreDataService().changeOrderStatus(orderId: orderDetails.orderId,userId: orderDetails.userId, status: newStatus){
             completion in
             
             let result = completion as! Int

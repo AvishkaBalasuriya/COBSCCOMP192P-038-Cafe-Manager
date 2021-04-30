@@ -22,6 +22,11 @@
 		2E6D8E1D26253F09006E6CC0 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E6D8E1C26253F09006E6CC0 /* NotificationService.swift */; };
 		2E82A6C62638087300A35809 /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E82A6C52638087300A35809 /* UserData.swift */; };
 		2E86D0852639F50600056010 /* BillOrderData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E86D0842639F50600056010 /* BillOrderData.swift */; };
+		2E8CE888263B5023003C0A7D /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E8CE887263B5023003C0A7D /* LoginViewController.swift */; };
+		2E8CE88B263B5030003C0A7D /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E8CE88A263B5030003C0A7D /* RegisterViewController.swift */; };
+		2E8CE88E263B5054003C0A7D /* ForgetPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E8CE88D263B5054003C0A7D /* ForgetPasswordViewController.swift */; };
+		2E8CE891263B5350003C0A7D /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E8CE890263B5350003C0A7D /* MainTabBarController.swift */; };
+		2E8CE894263BBF69003C0A7D /* InitialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E8CE893263BBF69003C0A7D /* InitialViewController.swift */; };
 		2E95BE7326385CF2009689FA /* StoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E95BE7226385CF2009689FA /* StoreViewController.swift */; };
 		2E95BE7726385EBB009689FA /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E95BE7626385EBB009689FA /* PreviewViewController.swift */; };
 		2E95BE7A26385EE6009689FA /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E95BE7926385EE6009689FA /* CategoryViewController.swift */; };
@@ -61,6 +66,11 @@
 		2E6D8E1F262546EC006E6CC0 /* Cafe-Manager.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Cafe-Manager.entitlements"; sourceTree = "<group>"; };
 		2E82A6C52638087300A35809 /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
 		2E86D0842639F50600056010 /* BillOrderData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BillOrderData.swift; sourceTree = "<group>"; };
+		2E8CE887263B5023003C0A7D /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		2E8CE88A263B5030003C0A7D /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
+		2E8CE88D263B5054003C0A7D /* ForgetPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgetPasswordViewController.swift; sourceTree = "<group>"; };
+		2E8CE890263B5350003C0A7D /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
+		2E8CE893263BBF69003C0A7D /* InitialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialViewController.swift; sourceTree = "<group>"; };
 		2E95BE7226385CF2009689FA /* StoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreViewController.swift; sourceTree = "<group>"; };
 		2E95BE7626385EBB009689FA /* PreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
 		2E95BE7926385EE6009689FA /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
@@ -155,6 +165,11 @@
 				2E95BE8226392689009689FA /* OrderViewController.swift */,
 				2E95BE8B2639527D009689FA /* OrderDetailsViewController.swift */,
 				2E14384F2639F0EE000B921F /* AccountViewController.swift */,
+				2E8CE887263B5023003C0A7D /* LoginViewController.swift */,
+				2E8CE88A263B5030003C0A7D /* RegisterViewController.swift */,
+				2E8CE88D263B5054003C0A7D /* ForgetPasswordViewController.swift */,
+				2E8CE890263B5350003C0A7D /* MainTabBarController.swift */,
+				2E8CE893263BBF69003C0A7D /* InitialViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -323,6 +338,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2E8CE888263B5023003C0A7D /* LoginViewController.swift in Sources */,
 				2E95BE80263879CA009689FA /* ItemData.swift in Sources */,
 				2E82A6C62638087300A35809 /* UserData.swift in Sources */,
 				2E1438502639F0EE000B921F /* AccountViewController.swift in Sources */,
@@ -344,12 +360,16 @@
 				2EC6F9952622B1540025580A /* firestoreDataService.swift in Sources */,
 				2E95BE7D26385F14009689FA /* MenuViewController.swift in Sources */,
 				2EFEE36A2622C8CA00953C6D /* Item.swift in Sources */,
+				2E8CE88E263B5054003C0A7D /* ForgetPasswordViewController.swift in Sources */,
 				2EC6F9912622AD350025580A /* User.swift in Sources */,
 				2E95BE86263926D9009689FA /* OrderData.swift in Sources */,
 				2EC6F98C2622ACD50025580A /* firebaseService.swift in Sources */,
 				2E6D8DF8262491AC006E6CC0 /* GpsLocation.swift in Sources */,
 				2EFEE3672622C87200953C6D /* Order.swift in Sources */,
+				2E8CE891263B5350003C0A7D /* MainTabBarController.swift in Sources */,
 				2E95BE9626399DA6009689FA /* Category.swift in Sources */,
+				2E8CE88B263B5030003C0A7D /* RegisterViewController.swift in Sources */,
+				2E8CE894263BBF69003C0A7D /* InitialViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

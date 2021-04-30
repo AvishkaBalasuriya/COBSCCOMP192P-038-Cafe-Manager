@@ -14,14 +14,16 @@ class Order: NSObject {
     var total:Float
     var status:Int
     var timestamp:Date
+    var userId:String
     
-    init(orderId:String,userEmailAddress:String,items:[Cart],total:Float,status:Int,timestamp:Date=Date()) {
+    init(orderId:String,userEmailAddress:String,items:[Cart],total:Float,status:Int,userId:String,timestamp:Date=Date()) {
         self.orderId=orderId
         self.userEmailAddress=userEmailAddress
         self.items=items
         self.total=total
         self.status=status
         self.timestamp=timestamp
+        self.userId=userId
     }
 }
 
