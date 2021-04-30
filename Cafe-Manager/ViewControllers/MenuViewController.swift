@@ -10,7 +10,7 @@ import UIKit
 class MenuViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITextViewDelegate{
     var imagePicker: ImagePicker!
     var pickerData:[String]=[]
-    var pickedImage:Data!
+    var pickedImage:Data = Data()
     var pickerCategory:String!=""
     @IBOutlet weak var pkrCategory: UIPickerView!
     @IBOutlet weak var btnAddItem: UIButton!
@@ -23,6 +23,9 @@ class MenuViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.addKeyboardHider()
+        
+        
         self.pkrCategory.delegate = self
         self.pkrCategory.dataSource = self
         
@@ -32,6 +35,9 @@ class MenuViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
         
         self.txtDescription.textColor = .lightGray
         self.txtDescription.text = "Item Description"
+        
+        self.txtItemPrice.text="0.0"
+        self.txtItemDiscount.text="0.0"
         
         firestoreDataService().getAllCategories(){
             completion in
@@ -61,6 +67,7 @@ class MenuViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
         for category in CategoryData.categoryList{
             self.pickerData.append(category.categoryName)
         }
+        self.pickerCategory=CategoryData.categoryList[0].categoryName
         completion(true)
     }
     
@@ -106,45 +113,66 @@ class MenuViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
         self.btnAddItem.isEnabled=false
         let itemId=NSUUID().uuidString.replacingOccurrences(of:"-", with: "")
         
-        FirebaseStorageService().upload(data:self.pickedImage , itemId: itemId){
-            completion in
-            
-            let result = completion as! String
-            
-            if result != ""{
-                let itemName=self.txtItemName.text!
-                let itemPrice=Float(self.txtItemPrice.text ?? "0.0")!
-                let itemDiscount=Float(self.txtItemDiscount.text ?? "0.0")!
-                let itemThumbnail=completion as! String
-                let itemDescription=self.txtDescription.text!
-                let category=self.pickerCategory!
-                let itemAvailability=self.tglItemAvailability.isOn
+        if self.validateInputs(){
+            FirebaseStorageService().upload(data:self.pickedImage , itemId: itemId){
+                completion in
                 
-                let item:Item=Item(itemId: itemId, itemName: itemName, itemThumbnail: itemThumbnail, itemDescription: itemDescription, itemPrice: itemPrice,itemDiscount:itemDiscount,isAvailable:itemAvailability, category: category)
+                let result = completion as! String
                 
-                firestoreDataService().addNewItem(item: item){
-                    completion in
+                if result != ""{
+                    let itemName=self.txtItemName.text!
+                    let itemPrice=Float(self.txtItemPrice.text ?? "0.0")!
+                    let itemDiscount=Float(self.txtItemDiscount.text ?? "0.0")!
+                    let itemThumbnail=completion as! String
+                    let itemDescription=self.txtDescription.text!
+                    let category=self.pickerCategory!
+                    let itemAvailability=self.tglItemAvailability.isOn
                     
-                    let result = completion as! Int
-                    if result==201{
-                        self.showAlert(title: "Success", message: "Item successfully added")
-                        self.clearFields()
-                    }else{
-                        self.showAlert(title: "Firestore Error", message: "Unable to add new item")
+                    let item:Item=Item(itemId: itemId, itemName: itemName, itemThumbnail: itemThumbnail, itemDescription: itemDescription, itemPrice: itemPrice,itemDiscount:itemDiscount,isAvailable:itemAvailability, category: category)
+                    
+                    firestoreDataService().addNewItem(item: item){
+                        completion in
+                        
+                        let result = completion as! Int
+                        if result==201{
+                            self.showAlert(title: "Success", message: "Item successfully added")
+                            self.clearFields()
+                        }else{
+                            self.showAlert(title: "Firestore Error", message: "Unable to add new item")
+                        }
                     }
+                }else{
+                    self.showAlert(title: "Firebase Storage Error", message: "Unable to upload image")
                 }
-            }else{
-                self.showAlert(title: "Firebase Storage Error", message: "Unable to upload image")
             }
-            
+        }else{
+            self.clearFields()
+            self.showAlert(title: "Oops!", message: "Please check the input fields")
         }
+    }
+    
+    private func validateInputs()->Bool{
+        if self.txtItemName.text != "" && self.txtDescription.text != "" && self.txtItemPrice.text != ""{
+            return true
+        }else{
+            return false
+        }
+    }
+    
+    func addKeyboardHider(){
+        let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
+        view.addGestureRecognizer(tap)
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
     }
 }
 
 extension MenuViewController: ImagePickerDelegate {
     func didSelect(image: UIImage?) {
         self.imgItemViewer.image = image
-        self.pickedImage=image?.pngData()
+        self.pickedImage=(image?.pngData())!
     }
 }
 

@@ -53,11 +53,6 @@ class LoginViewController: UIViewController {
         }
     }
     
-    func addKeyboardHider(){
-        let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
-        view.addGestureRecognizer(tap)
-    }
-    
     func addTapFunctions(){
         let registerTap = UITapGestureRecognizer(target: self, action: #selector(LoginViewController.registerTapFunction))
         lblRegister.isUserInteractionEnabled = true
@@ -80,6 +75,11 @@ class LoginViewController: UIViewController {
         self.navigationItem.leftBarButtonItem=nil
         self.navigationItem.hidesBackButton=true
         self.navigationController?.pushViewController(forgetPasswordViewController!, animated: true)
+    }
+    
+    func addKeyboardHider(){
+        let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
+        view.addGestureRecognizer(tap)
     }
     
     @objc func dismissKeyboard() {

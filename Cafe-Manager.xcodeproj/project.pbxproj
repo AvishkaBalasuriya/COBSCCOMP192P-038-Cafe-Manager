@@ -128,7 +128,6 @@
 				2E82A6C42638084F00A35809 /* data */,
 				2E1FDDDC26356DDA00B271A0 /* GoogleService-Info.plist */,
 				2E6D8E1F262546EC006E6CC0 /* Cafe-Manager.entitlements */,
-				2EC6F98F2622ACEB0025580A /* utils */,
 				2EC6F98E2622ACE10025580A /* models */,
 				2EC6F9862622AC5F0025580A /* services */,
 				2E6AD2992622A943003D61F7 /* AppDelegate.swift */,
@@ -197,13 +196,6 @@
 				2E95BE9526399DA6009689FA /* Category.swift */,
 			);
 			path = models;
-			sourceTree = "<group>";
-		};
-		2EC6F98F2622ACEB0025580A /* utils */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = utils;
 			sourceTree = "<group>";
 		};
 		9E67BB1090EA70A6134D9853 /* Pods */ = {
