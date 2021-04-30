@@ -529,8 +529,7 @@
                                                                         <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" restorationIdentifier="swItemStatus" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="70o-wW-2yz">
                                                                             <rect key="frame" x="34.5" y="33" width="51" height="31"/>
                                                                             <connections>
-                                                                                <action selector="tglAvailability:" destination="ySD-bI-ZUz" eventType="valueChanged" id="5M2-3B-B4x"/>
-                                                                                <action selector="tglAvailabilityChanged:" destination="ySD-bI-ZUz" eventType="valueChanged" id="NpZ-Td-Bos"/>
+                                                                                <action selector="btnAvailability:" destination="ySD-bI-ZUz" eventType="valueChanged" id="pZb-tu-0es"/>
                                                                             </connections>
                                                                         </switch>
                                                                     </subviews>
@@ -561,7 +560,7 @@
                                             <outlet property="lblFoodDiscount" destination="Gh7-ml-ucp" id="quQ-Xm-dl2"/>
                                             <outlet property="lblFoodName" destination="JlT-EX-1sZ" id="yEf-CB-2qC"/>
                                             <outlet property="lblFoodPrice" destination="RZ3-Zk-Ai6" id="7Pz-ug-lzn"/>
-                                            <outlet property="tglAvailable" destination="70o-wW-2yz" id="Mbp-aM-eV7"/>
+                                            <outlet property="tglAvailable" destination="70o-wW-2yz" id="IHK-YC-Vb0"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -950,7 +949,7 @@
                                                                                 <subviews>
                                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add new category" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="br1-0d-RTw">
                                                                                         <rect key="frame" x="0.0" y="0.0" width="254" height="70"/>
-                                                                                        <fontDescription key="fontDescription" name="AppleSDGothicNeo-Bold" family="Apple SD Gothic Neo" pointSize="30"/>
+                                                                                        <fontDescription key="fontDescription" name="AppleSDGothicNeo-Bold" family="Apple SD Gothic Neo" pointSize="25"/>
                                                                                         <nil key="textColor"/>
                                                                                         <nil key="highlightedColor"/>
                                                                                     </label>

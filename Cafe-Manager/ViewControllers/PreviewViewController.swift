@@ -22,9 +22,13 @@ class ItemTableViewCell: UITableViewCell {
     @IBOutlet weak var lblFoodDiscount: UILabel!
     @IBOutlet weak var tglAvailable: UISwitch!
     
-    @IBAction func tglAvailable(_ sender: UISwitch) {
-        print(sender.accessibilityIdentifier)
+    @IBAction func btnAvailability(_ sender: UISwitch) {
+        firestoreDataService().updateItemAvailability(itemId: sender.accessibilityIdentifier!, isAvailable: self.tglAvailable.isOn){
+            completion in
+        }
     }
+    
+
 }
 
 class PreviewViewController: UIViewController {
@@ -107,7 +111,7 @@ extension PreviewViewController:UITableViewDataSource{
         
         cell.tglAvailable.isOn=objectsArray[indexPath.section].sectionObjects[indexPath.row].isAvailable
         
-//       cell.tglAvailable.accessibilityIdentifier=objectsArray[indexPath.section].sectionObjects[indexPath.row].itemId
+       cell.tglAvailable.accessibilityIdentifier=objectsArray[indexPath.section].sectionObjects[indexPath.row].itemId
         
         cell.layer.backgroundColor = UIColor.clear.cgColor
         cell.layer.shadowColor = UIColor.black.cgColor
