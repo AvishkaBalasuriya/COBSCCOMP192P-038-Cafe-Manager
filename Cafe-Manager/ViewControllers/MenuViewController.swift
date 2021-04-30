@@ -67,10 +67,11 @@ class MenuViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
     private func clearFields(){
         self.imgItemViewer.image=UIImage(named: "Defualt Image")
         self.txtItemName.text=nil
-        self.txtItemPrice.text=nil
-        self.txtItemDiscount.text=nil
+        self.txtItemPrice.text="0.0"
+        self.txtItemDiscount.text="0.0"
         self.txtDescription.text="Item Description"
         self.tglItemAvailability.isOn=true
+        self.btnAddItem.isEnabled=true
     }
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
@@ -102,6 +103,7 @@ class MenuViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
     }
     
     @objc func addNewItem(sender:UIButton){
+        self.btnAddItem.isEnabled=false
         let itemId=NSUUID().uuidString.replacingOccurrences(of:"-", with: "")
         
         FirebaseStorageService().upload(data:self.pickedImage , itemId: itemId){

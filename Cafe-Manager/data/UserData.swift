@@ -17,4 +17,8 @@ func setUserData(user:User){
     UserData.emailAddress=user.emailAddress
     UserData.mobileNumber=user.mobileNumber
     UserData.uuid=user.uuid
+    print("##########################")
+    print(user.uuid)
+    print(user.emailAddress)
+    print(user.mobileNumber)
 }

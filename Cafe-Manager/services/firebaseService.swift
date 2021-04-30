@@ -38,7 +38,11 @@ class FirebaseService: NSObject {
                     }
                 }else {
                     UserDefaults.standard.set(true, forKey: "isLogged")
+                    UserDefaults.standard.set(user.emailAddress, forKey: "emailAddress")
+                    UserDefaults.standard.set(response?.user.uid, forKey: "uuid")
+                    UserData.emailAddress=user.emailAddress
                     UserData.uuid=(response?.user.uid)!
+                    
                     result(200)
                 }
             }
@@ -66,8 +70,15 @@ class FirebaseService: NSObject {
                         completion in
                         if (completion != nil){
                             user.uuid=(response?.user.uid)!
-                            setUserData(user: user)
+                            
                             UserDefaults.standard.set(true, forKey: "isLogged")
+                            UserDefaults.standard.set(user.emailAddress, forKey: "emailAddress")
+                            UserDefaults.standard.set(user.mobileNumber, forKey: "mobileNumber")
+                            UserDefaults.standard.set(response?.user.uid, forKey: "uuid")
+                            
+                            UserData.emailAddress=user.emailAddress
+                            UserData.mobileNumber=user.mobileNumber
+                            UserData.uuid=(response?.user.uid)!
                             result(201)
                         }else{
                             result(500)

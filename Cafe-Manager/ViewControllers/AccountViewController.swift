@@ -50,8 +50,12 @@ class AccountViewController: UIViewController {
         
         firestoreDataService().getOrdersByStatus(status: 4){
             completion in
-            self.makeDateArray(isFilter: false)
-            self.tblBill.reloadData()
+            if completion is [Order]{
+                self.makeDateArray(isFilter: false)
+                self.tblBill.reloadData()
+            }else{
+                self.showAlert(title: "Firestore Error", message: "Unable to fetch order data")
+            }
         }
         
     }
@@ -116,10 +120,17 @@ class AccountViewController: UIViewController {
     
     @IBAction func pkrEndDate(sender: UIDatePicker) {
         self.endDate=sender.date
+        print(self.startDate,self.endDate)
         firestoreDataService().getOrdersByDateRange(start: self.startDate, end:self.endDate,status: 4){
             completion in
-            self.makeDateArray(isFilter: true)
-            self.tblBill.reloadData()
+            print("Orders Filtered")
+            print(BillOrderData.billOrderList)
+            if completion is [Order]{
+                self.makeDateArray(isFilter: true)
+                self.tblBill.reloadData()
+            }else{
+                self.showAlert(title: "Firestore Error", message: "Unable to fetch order data")
+            }
         }
     }
 }

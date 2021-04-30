@@ -51,6 +51,7 @@ class OrderViewController: UIViewController {
         for (key,value) in sectionItem{
              orderObjectsArray.append(OrderObjects(sectionName: key, sectionObjects: value))
         }
+        print(orderObjectsArray)
     }
     
     private func mapOrderStatus(status:Int)->String{
@@ -93,10 +94,11 @@ extension OrderViewController:UITableViewDataSource{
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return orderObjectsArray.count
-    }
-    
-    func numberOfSectionsInTableView(table:UITableView)->Int{
+        if orderObjectsArray.count == 0 {
+            self.tblOrderTable.setEmptyView(title: "No orders", message: "Your orders will display in here")
+        } else {
+            self.tblOrderTable.restore()
+        }
         return orderObjectsArray.count
     }
     

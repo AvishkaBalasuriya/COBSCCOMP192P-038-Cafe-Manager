@@ -44,6 +44,9 @@ class firestoreDataService: NSObject {
                 user.emailAddress=document.get("emailAddress") as! String
                 user.mobileNumber=document.get("mobileNumber") as! String
                 user.type=document.get("type") as! Int
+                
+                UserDefaults.standard.set(user.mobileNumber, forKey: "mobileNumber")
+                UserData.mobileNumber=user.mobileNumber
                 completion(user)
             } else {
                 completion(404)
@@ -183,36 +186,47 @@ class firestoreDataService: NSObject {
     
     func getOrdersByDateRange(start:Date,end:Date,status:Int,completion: @escaping (Any)->()){
         var orders:[Order] = []
-        db.collection("orders").whereField("status", isEqualTo: status).whereField("timestamp",isGreaterThanOrEqualTo: end).whereField("timestamp", isLessThanOrEqualTo: start).getDocuments(){
+        db.collection("orders").whereField("timestamp",isGreaterThanOrEqualTo: end).whereField("timestamp", isLessThanOrEqualTo: start).getDocuments(){
             (querySnapshot, err) in
             if let err = err {
                 completion(500)
             }else{
                 for document in querySnapshot!.documents {
-                    var cart:[Cart]=[]
-                    let orderId:String=document.data()["orderId"] as! String
-                    let userEmailAddress:String=document.data()["userEmailAddress"] as! String
-                    let items = document.data()["items"] as! [Any]
-                    for item in items{
-                        let itemData = item as! [String:Any]
-                        let itemId:String = itemData["itemId"] as! String
-                        let itemName:String = itemData["itemName"] as! String
-                        let itemQty:Int = itemData["itemQty"] as! Int
-                        let itemPrice:Float = itemData["itemPrice"] as! Float
-                        let totalPrice:Float = itemData["totalPrice"] as! Float
-                        let cartItem = Cart(itemId: itemId, itemName: itemName, itemQty: itemQty, itemPrice: itemPrice, totalPrice: totalPrice)
-                        cart.append(cartItem)
+                    if document.data()["status"] as! Int==4{
+                        var cart:[Cart]=[]
+                        let orderId:String=document.data()["orderId"] as! String
+                        let userEmailAddress:String=document.data()["userEmailAddress"] as! String
+                        let items = document.data()["items"] as! [Any]
+                        for item in items{
+                            let itemData = item as! [String:Any]
+                            let itemId:String = itemData["itemId"] as! String
+                            let itemName:String = itemData["itemName"] as! String
+                            let itemQty:Int = itemData["itemQty"] as! Int
+                            let itemPrice:Float = itemData["itemPrice"] as! Float
+                            let totalPrice:Float = itemData["totalPrice"] as! Float
+                            let cartItem = Cart(itemId: itemId, itemName: itemName, itemQty: itemQty, itemPrice: itemPrice, totalPrice: totalPrice)
+                            cart.append(cartItem)
+                        }
+                        let total:Float=document.data()[
+                            "total"] as! Float
+                        let status:Int=document.data()["status"] as! Int
+                        let timestamp:Timestamp = document.data()["timestamp"] as! Timestamp
+                        let userId:String = document.data()["userId"] as! String
+                        orders.append(Order(orderId: orderId, userEmailAddress: userEmailAddress, items: cart, total: total, status: status,userId: userId,timestamp:timestamp.dateValue()))
                     }
-                    let total:Float=document.data()[
-                        "total"] as! Float
-                    let status:Int=document.data()["status"] as! Int
-                    let timestamp:Timestamp = document.data()["timestamp"] as! Timestamp
-                    let userId:String = document.data()["userId"] as! String
-                    orders.append(Order(orderId: orderId, userEmailAddress: userEmailAddress, items: cart, total: total, status: status,userId: userId,timestamp:timestamp.dateValue()))
                 }
                 populateBillOrderList(orders: orders)
                 completion(orders)
             }
+        }
+    }
+    
+    func deleteCategory(categoryId:String)->Bool{
+        do{
+            db.collection("categories").document(categoryId).delete()
+            return true
+        } catch{
+            return false
         }
     }
     

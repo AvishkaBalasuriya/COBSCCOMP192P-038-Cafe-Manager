@@ -13,6 +13,12 @@ class InitialViewController: UIViewController {
         super.viewDidLoad()
         let isLogged=UserDefaults.standard.bool(forKey: "isLogged")
         if isLogged{
+            let user = User()
+            user.emailAddress=UserDefaults.standard.string(forKey: "emailAddress")!
+            user.mobileNumber=UserDefaults.standard.string(forKey: "mobileNumber")!
+            user.uuid=UserDefaults.standard.string(forKey: "uuid")!
+            setUserData(user: user)
+            
             let storeTabBarController = self.storyboard?.instantiateViewController(withIdentifier:"MainTabBarController") as? MainTabBarController
             self.navigationController?.setNavigationBarHidden(true, animated: false)
             self.navigationItem.leftBarButtonItem=nil

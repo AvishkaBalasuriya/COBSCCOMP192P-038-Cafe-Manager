@@ -77,6 +77,21 @@ extension CategoryViewController:UITableViewDataSource{
         return CategoryData.categoryList.count
     }
     
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if (editingStyle == .delete) {
+            let result = firestoreDataService().deleteCategory(categoryId: CategoryData.categoryList.remove(at: indexPath.row).categoryId) as! Bool
+            if result{
+                self.showAlert(title: "Success", message: "Category Successfully deleted")
+            }else{
+                self.showAlert(title: "Firestore Error", message: "Unable to delete category")
+            }
+        }
+    }
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         if CategoryData.categoryList.count == 0 {
             self.tblCategory.setEmptyView(title: "No categories", message: "Your categories will display in here")
